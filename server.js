@@ -1,9 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-
 const app = express();
-
+app.use(express.json());
 app.use(cors());
+
+//To use the tester app: Go to the website. At the top there's a place to set the API. In the "new endpoint..." input, type the URL http://localhost:3000 and add the appropriate endpoint
 
 const welcomeMessage = {
   id: 0,
@@ -31,24 +32,25 @@ app.get("/messages/:id", (req, res) => {
   const id = parseInt(req.params.id);
   //Look through the messages to find the message by ID
   const messageByID = messages.find((message) => message.id == id);
-  //Return that message
+  //Return that message.
   res.send(messageByID);
 });
 
 //POST - Create a new message
-app.post("/messages/new", (req, res) => {
+app.post("/messages", (req, res) => {
   //Create new message object
   const lastMessageIndex = parseInt(messages.length - 1);
   const newID = messages[lastMessageIndex].id + 1;
+  const body = req.body;
   const newMessage = {
     id: newID,
-    from: "Mom",
-    text: "Where are you? Call me!",
+    from: body.from,
+    text: body.text,
   };
   //Add it to the array of messages
   messages.push(newMessage);
   //Return success and console log the full array of messages
-  console.log(newMessage);
+  // console.log(newMessage);
   console.log(messages);
   res.status(201).send(newMessage);
 });
