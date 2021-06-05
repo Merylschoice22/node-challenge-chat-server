@@ -31,12 +31,17 @@ app.get("/messages", (req, res) => {
 //GET - Read only messages whose text contains a given substring: /messages/search?text=express
 app.get("/messages/search", (req, res) => {
   //Get search string from the query params
-  const searchText = req.query.text;
+  const searchText = req.query.text.toLowerCase();
   //Search all of the messages to see if they contain the search string
-  const filteredMessages = messages.filter((m) => m.text.includes(searchText));
-  //Return found messages
-  console.log("----------------");
-  res.send(filteredMessages);
+  const filteredMessages = messages.filter((m) =>
+    m.text.toLowerCase().includes(searchText)
+  );
+  //Return found messages. If there are no matches, it will return an empty array. Return a 404 status
+  if (filteredMessages.length < 1) {
+    res.status(404).send();
+  } else {
+    res.send(filteredMessages);
+  }
 });
 
 //GET - Read one message specified by an ID
