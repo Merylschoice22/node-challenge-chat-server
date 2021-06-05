@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const { response } = require("express");
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -21,9 +22,21 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + "/index.html");
 });
 
-//GET - Read all messages
+//GET - Read all messages.
 app.get("/messages", (req, res) => {
+  console.log("----all messages ----");
   res.send(messages);
+});
+
+//GET - Read only messages whose text contains a given substring: /messages/search?text=express
+app.get("/messages/search", (req, res) => {
+  //Get search string from the query params
+  const searchText = req.query.text;
+  //Search all of the messages to see if they contain the search string
+  const filteredMessages = messages.filter((m) => m.text.includes(searchText));
+  //Return found messages
+  console.log("----------------");
+  res.send(filteredMessages);
 });
 
 //GET - Read one message specified by an ID
@@ -32,6 +45,11 @@ app.get("/messages/:id", (req, res) => {
   const id = parseInt(req.params.id);
   //Look through the messages to find the message by ID
   const messageByID = messages.find((message) => message.id == id);
+
+  //If there's no message by that ID, return status 404
+  if (!messageByID) {
+    return res.status(404).send();
+  }
   //Return that message.
   res.send(messageByID);
 });
@@ -39,7 +57,7 @@ app.get("/messages/:id", (req, res) => {
 //POST - Create a new message.
 //Add validation - Reject requests to create messages if the message objects have an empty or missing text or from property. In this case your server should return a status code of 400
 app.post("/messages", (req, res) => {
-  //Create new message object
+  //Create new message object with the new ID, and the form and text from the request body
   const lastMessageIndex = parseInt(messages.length - 1);
   const newID = messages[lastMessageIndex].id + 1;
   const body = req.body;
