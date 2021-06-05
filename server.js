@@ -20,6 +20,26 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + "/index.html");
 });
 
+//GET - Read all messages
+app.get("/messages", (req, res) => {
+  res.send(messages);
+});
+
+//GET - Read one message specified by an ID
+app.get("/messages/:id", (req, res) => {
+  //Take the ID number specified in the URL address
+  const id = parseInt(req.params.id);
+  //Look through the messages to find the message by ID
+  const messageByID = messages.find((message) => message.id == id);
+  //Return that message
+  res.send(messageByID);
+});
+
+//POST - Create a new message
+app.post("");
+
+//DELETE - Delete a message, by ID
+
 app.listen(3000, () => {
-   console.log("Listening on port 3000")
-  });
+  console.log("Listening on port 3000");
+});
