@@ -13,10 +13,114 @@ const welcomeMessage = {
   text: "Welcome to CYF chat system!",
 };
 
+const allMessages = [
+  {
+    id: 0,
+    from: "Aart",
+    text: "Welcome to CYF chat system!",
+  },
+  {
+    id: 1,
+    from: "Bart",
+    text: "This is message one!",
+  },
+  {
+    id: 2,
+    from: "Cart",
+    text: "This is message 2!",
+  },
+  {
+    id: 3,
+    from: "Dart",
+    text: "This is the third message!",
+  },
+  {
+    id: 4,
+    from: "Eart",
+    text: "Message 4!",
+  },
+  {
+    id: 5,
+    from: "Fart",
+    text: "Fifth message!",
+  },
+  {
+    id: 6,
+    from: "Gart",
+    text: "Six message!",
+  },
+  {
+    id: 7,
+    from: "Hart",
+    text: "Message 7!",
+  },
+  {
+    id: 8,
+    from: "Iart",
+    text: "Ths is message eight!",
+  },
+  {
+    id: 9,
+    from: "Jart",
+    text: "Message nine!",
+  },
+  {
+    id: 10,
+    from: "Kart",
+    text: "Message 10. Welcome to CYF chat system!",
+  },
+  {
+    id: 11,
+    from: "Lart",
+    text: "Messsage eleven!",
+  },
+  {
+    id: 12,
+    from: "Mart",
+    text: "twelve twelve system!",
+  },
+  {
+    id: 13,
+    from: "Nart",
+    text: "13131313Welcome to CYF chat system!",
+  },
+  {
+    id: 14,
+    from: "Oart",
+    text: "Fourteeen. Welcome to CYF chat system!",
+  },
+  {
+    id: 15,
+    from: "Part",
+    text: "Fifteenth message. Welcome to CYF chat system!",
+  },
+  {
+    id: 16,
+    from: "Qart",
+    text: "Sixteen. Welcome to CYF chat system!",
+  },
+  {
+    id: 17,
+    from: "Rart",
+    text: "RRRRRRRRRWelcome to CYF chat system!",
+  },
+  {
+    id: 18,
+    from: "Sart",
+    text: "SSSSSSSSSWelcome to CYF chat system!",
+  },
+  {
+    id: 19,
+    from: "Tart",
+    text: "TTTTTTTTTTTTTTTTTWelcome to CYF chat system!",
+  },
+];
+
 //This array is our "data store".
 //We will start with one message in the array.
 //Note: messages will be lost when Glitch restarts our server.
-const messages = [welcomeMessage];
+// const messages = [welcomeMessage];
+const messages = allMessages;
 
 app.get("/", function (request, response) {
   response.sendFile(__dirname + "/index.html");
@@ -42,6 +146,16 @@ app.get("/messages/search", (req, res) => {
   } else {
     res.send(filteredMessages);
   }
+});
+
+//GET - Read only the most recent 10 messages: /messages/latest
+app.get("/messages/latest", (req, res) => {
+  //Get messages in the array and identify their index
+  //Take out specifically the final 10 items
+  const slice = messages.slice(-10, messages.length);
+  //Return those 10 items
+  console.log(`Final 10 messages`);
+  res.send(slice);
 });
 
 //GET - Read one message specified by an ID
