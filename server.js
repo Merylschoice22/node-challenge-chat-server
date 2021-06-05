@@ -36,7 +36,8 @@ app.get("/messages/:id", (req, res) => {
   res.send(messageByID);
 });
 
-//POST - Create a new message
+//POST - Create a new message.
+//Add validation - Reject requests to create messages if the message objects have an empty or missing text or from property. In this case your server should return a status code of 400
 app.post("/messages", (req, res) => {
   //Create new message object
   const lastMessageIndex = parseInt(messages.length - 1);
@@ -47,12 +48,17 @@ app.post("/messages", (req, res) => {
     from: body.from,
     text: body.text,
   };
-  //Add it to the array of messages
-  messages.push(newMessage);
-  //Return success and console log the full array of messages
-  // console.log(newMessage);
-  console.log(messages);
-  res.status(201).send(newMessage);
+  //Add it to the array of messages IF message contains all necessary elements
+  if (newMessage.from && newMessage.text) {
+    messages.push(newMessage);
+    //Return success and console log the full array of messages
+    console.log(messages);
+    res.status(201).send(newMessage);
+  } else {
+    //If it doesn't have the necessary elements, return a status code of 400
+    console.log(`Bad request`);
+    res.status(400).send();
+  }
 });
 
 //DELETE - Delete a message, by ID
