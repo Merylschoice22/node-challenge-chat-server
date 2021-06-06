@@ -187,8 +187,10 @@ app.post("/messages", (req, res) => {
   };
   //Add it to the array of messages IF message contains all necessary elements
   if (newMessage.from && newMessage.text) {
-    messages.push(newMessage);
     //Return success and console log the full array of messages
+    //Store a timestamp in each message object, in a field called timeSent. his should be set to the current time when the server first receives the message. This should be a DateTime object, which can be created with new Date(). It will NOT be submitted by the client. --Add it to the object itself
+    newMessage.timeSent = new Date();
+    messages.push(newMessage);
     console.log(messages);
     res.status(201).send(newMessage);
   } else {
